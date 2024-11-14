@@ -29,7 +29,7 @@ func EchoWithConfig(config Config) echo.MiddlewareFunc {
 				ResponseTime: time.Since(start),
 			}
 			if err := recorder.Save(r); err != nil {
-				c.Logger().Error(err)
+				c.Logger().Errorf("[ERROR] Failed to record. isulog: %s", err.Error())
 			}
 
 			return nil

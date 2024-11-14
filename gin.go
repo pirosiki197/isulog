@@ -27,7 +27,7 @@ func GinWithConfig(config Config) gin.HandlerFunc {
 			ResponseTime: time.Since(start),
 		}
 		if err := recorder.Save(r); err != nil {
-			log.Printf("ERROR Failed to record. isulog: %s", err.Error())
+			log.Printf("[ERROR] Failed to record. isulog: %s", err.Error())
 		}
 	}
 }

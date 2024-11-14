@@ -1,6 +1,6 @@
 module github.com/pirosiki197/isulog
 
-go 1.22
+go 1.23
 
 toolchain go1.23.3
 
