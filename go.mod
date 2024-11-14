@@ -6,6 +6,7 @@ toolchain go1.23.3
 
 require (
 	github.com/gin-gonic/gin v1.10.0
+	github.com/go-chi/chi/v5 v5.1.0
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/samber/lo v1.47.0
 )
