@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"bufio"
 	"encoding/gob"
 	"os"
 	"sync"
@@ -27,16 +28,9 @@ func NewRecorder(filename string) *Recorder {
 func (r *Recorder) Save(record Record) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	r.records = append(r.records, record)
-	if len(r.records) < 1024 {
-		return nil
-	}
-
-	for _, record := range r.records {
-		if err := r.enc.Encode(record); err != nil {
-			if err := r.reset(); err != nil {
-				return err
-			}
+	if err := r.enc.Encode(record); err != nil {
+		if err := r.reset(); err != nil {
+			return err
 		}
 	}
 	return nil
@@ -47,7 +41,7 @@ func (r *Recorder) reset() error {
 	if err != nil {
 		return err
 	}
-	r.enc = gob.NewEncoder(f)
+	r.enc = gob.NewEncoder(bufio.NewWriter(f))
 	return nil
 }
 

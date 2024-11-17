@@ -47,7 +47,7 @@ func (p *Parser) Parse() error {
 		if errors.Is(err, io.EOF) {
 			break
 		} else if err != nil {
-			return err
+			break
 		}
 
 		key := genKey(record)
