@@ -57,6 +57,7 @@ func (p *Parser) Parse() error {
 	p.profiles = make([]Profile, 0, len(data))
 	for _, records := range data {
 		durations := lo.Map(records, func(r Record, _ int) time.Duration { return r.ResponseTime.Truncate(100 * time.Microsecond) })
+		slices.Sort(durations)
 
 		var (
 			minTime time.Duration = time.Hour
