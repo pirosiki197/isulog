@@ -12,11 +12,13 @@ type Recorder struct {
 	filename string
 	enc      *gob.Encoder
 	mu       sync.Mutex
+	records  []Record
 }
 
 func NewRecorder(filename string) *Recorder {
 	r := &Recorder{
 		filename: filename,
+		records:  make([]Record, 1024),
 	}
 	r.reset()
 	return r
@@ -25,12 +27,17 @@ func NewRecorder(filename string) *Recorder {
 func (r *Recorder) Save(record Record) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	err := r.enc.Encode(record)
-	if err != nil {
-		if err := r.reset(); err != nil {
-			return err
+	r.records = append(r.records, record)
+	if len(r.records) < 1024 {
+		return nil
+	}
+
+	for _, record := range r.records {
+		if err := r.enc.Encode(record); err != nil {
+			if err := r.reset(); err != nil {
+				return err
+			}
 		}
-		return r.enc.Encode(record)
 	}
 	return nil
 }
